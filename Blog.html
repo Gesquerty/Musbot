@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Musbot</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            margin-left: 10vw;
+            margin-right: 10vw;
+            font-family: Arial, sans-serif;
+            text-align: left;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-color: black;
+            color: white;
+        }
+        h1 {
+            font-family: "Times New Roman", Times, serif;
+        }
+        #grid {
+            display: grid;
+            grid-template-columns: repeat(15, 24px);
+            grid-template-rows: repeat(15, 24px);
+            gap: 2px;
+            margin: 20px auto;
+        }
+        .cell {
+            width: 24px;
+            height: 24px;
+            background-color: #111;
+            border-radius: 3px;
+            cursor: pointer;
+            transition: background-color 120ms linear, box-shadow 120ms linear, transform 120ms linear;
+        }
+        .cell:hover {
+            outline: 1px solid #888;
+        }
+        .cell.active {
+            box-shadow: 0 0 8px #fff, 0 0 18px #fff;
+            outline: 1px solid #fff;
+            transform: scale(1.15);
+        }
+        #controls {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            margin-top: 16px;
+        }
+        #controls button {
+            padding: 8px 20px;
+            font-size: 1rem;
+            cursor: pointer;
+            color: #ffffff;
+            background-color: #333333;
+            border: 1px solid #555555;
+            border-radius: 4px;
+        }
+        #controls button:hover {
+            background-color: #444444;
+        }
+    </style>
+</head>
+<body>
+    <h1>Musbot Blog</h1>
+
+    <p>
+    With the growing presence of AI art (or slop), it is natural to wonder what gives value to art? Perhaps, it is aesthetics or originality or simply human effort. Yet, no matter how many orthogonal arguments can be made on the nature this artistic essence, it seems that popular consensus has ruled it to be absent in AI art. AI art has widely been regarded as cheap, requiring virtually no human labor to create, and unoriginal, existing only by “ripping-off” millions of human artists’ work. While I agree with this consensus, I also wish to test the boundaries these popular opinions to better understand: what is so offensive about generative art? Toward this end, this project explores the gap between algorithmic music and machine learned music. That is music created by the laborious effort of hand programming music theoretic rules versus music created by learning on human created examples. To blend these two ends together, I introduce Musbot: a simple Markov chain learning model which learns from human feedback only. It aims to mesh the laborious effort of hand programming rules with the intuitive intelligence of a learning algorithm. Before I delve into the technical details and limitations of training such a model, ponder whether you feel its music is original art? 
+    </p>
+
+    <p>
+    The fundamental constraint of this system is how to teach a model what sounds good and bad without training date. To achieve some sort of result with my limited time to train, I focused on the simplest possible model: a 1-th order Markov chain (I tried higher order chains as well, but training would have taken hopelessly long).  The idea is simple: at each timestep, a value is sampled from the chain to produce the next note and if the user enjoys the music, they can “give a treat” which upregulates the transition probabilities corresponding to the previously played notes. Specifically, the Markov chain has 15 actions at its disposal at each step:
+    </p>
+    
+    <p>
+    play one of 12 notes in the chromatic scale,
+    <br>
+    play no note,
+    <br>
+    increase the scale by an octave and repeat the previous note an octave higher,
+    <br>
+    decrease the scale by an octave and repeat the previous note an octave lower.
+    </p>
+    
+    <p>
+    The choice to focus on such a constrained output space was again influenced by the limitations of my time to train the model. To complete the training, I used the simplest training algorithm I could think of: pressing “give a treat” adds some function rewardFunc(i) to the i-th most recently transition probabilities for i in 1 to 10 and then renormalizes the transition matrix. To make quick progress in early training, I set the playback speed (i.e. bpm) to 30 and I set rewardFunc(i) to be: e^{-i}/15. This reward function essentially only increases the weights of the last two played transitions allowing precise rewards for pleasant note changes. It was in this stage that the two yellow strips formed as seen in the heat map visualization of the transition probability matrix. As the learner gained a handle on reasonable note to note transitions, I increased the bpm and set the reward function to 2^{-0.1*(i-3)^2}/15. This new reward function gives a smaller and more uniform boost to recently played transitions with the 3-rd most recent transition getting the highest reward to account for the delay between hearing a pleasant note sequence and giving a reward. After a few hours of training and a mild headache, the current transition matrix was arrived at. The model continues to be trainable and I encourage users to do so!
+    </p>
+
+    <p>
+    One final specification for the real WedAudio nerds: the sound of each note is created by combining a sine wave at the fundamental frequency, a triangle wave at twice the fundamental frequence, and a square wave at three times the fundamental frequency. All three oscillators are controlled by the same envelope and a bit of reverb is added to make the sound a bit more natural (and sexy). 
+    </p>
+
+    <!--<script src="script.js"></script>-->
+
+    <p><a href="index.html" style="color: white;">back.</a></p>
+</body>
+</html>

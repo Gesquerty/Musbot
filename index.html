@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Musbot</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-color: black;
+            color: white;
+        }
+        h1 {
+            font-family: "Times New Roman", Times, serif;
+        }
+        #grid {
+            display: grid;
+            grid-template-columns: repeat(15, 24px);
+            grid-template-rows: repeat(15, 24px);
+            gap: 2px;
+            margin: 20px auto;
+        }
+        .cell {
+            width: 24px;
+            height: 24px;
+            background-color: #111;
+            border-radius: 3px;
+            cursor: pointer;
+            transition: background-color 120ms linear, box-shadow 120ms linear, transform 120ms linear;
+        }
+        .cell:hover {
+            outline: 1px solid #888;
+        }
+        .cell.active {
+            box-shadow: 0 0 8px #fff, 0 0 18px #fff;
+            outline: 1px solid #fff;
+            transform: scale(1.15);
+        }
+        #controls {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            margin-top: 16px;
+        }
+        #controls button {
+            padding: 8px 20px;
+            font-size: 1rem;
+            cursor: pointer;
+            color: #ffffff;
+            background-color: #333333;
+            border: 1px solid #555555;
+            border-radius: 4px;
+        }
+        #controls button:hover {
+            background-color: #444444;
+        }
+    </style>
+</head>
+<body>
+    <h1>Musbot</h1>
+
+    <div id="grid"></div>
+
+    <div id="controls">
+        <button id="start_button">start</button>
+        <button id="reward_button">give a treat</button>
+    </div>
+
+    <p><a href="Blog.html" style="color: white;">blog.</a></p>
+
+    <script src="script.js"></script>
+</body>
+</html>
