@@ -2,7 +2,7 @@
 const bpm = 400;
 const numNotes = 10;
 const matrixSize = 15;
-const clickReward = 0.3;//0.025;
+const clickReward = 0.05;//0.025;
 const stepDuration = 60 / bpm; // seconds per beat
 
 // Reverb settings
