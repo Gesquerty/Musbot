@@ -2,7 +2,7 @@
 const bpm = 400;
 const numNotes = 10;
 const matrixSize = 15;
-const clickReward = 0.05;//0.025;
+const clickReward = 0.0;//0.025;
 const stepDuration = 60 / bpm; // seconds per beat
 
 // Reverb settings
@@ -66,7 +66,7 @@ function saveMatrix() {
     localStorage.setItem(STORAGE_KEY, matrixToCsv(transitionMatrix));
 }
 
-saveMatrix();
+//saveMatrix();
 
 function initializeMatrix() {
     const saved = localStorage.getItem(STORAGE_KEY);
